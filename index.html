@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Song BPM Sorter</title>
+  </head>
+  <body>
+    <h1>Song BPM Sorter</h1>
+    <p>
+      Enter song names and their BPMs as a 2 to 3 digit number next to each
+      song:
+    </p>
+    <textarea
+      id="songsInput"
+      rows="10"
+      cols="50"
+      placeholder="Enter song names and their BPMs here"
+    ></textarea>
+    <button onclick="sortSongs()">Sort Songs</button>
+    <p><strong>Sorted Songs:</strong></p>
+    <textarea
+      id="sortedSongs"
+      rows="10"
+      cols="50"
+      readonly
+      aria-label="Sorted Songs"
+    ></textarea>
+
+    <script>
+      function sortSongs() {
+        const input = document.getElementById("songsInput").value.trim();
+
+        if (!input) {
+          document.getElementById("sortedSongs").value =
+            "Please enter song names and their BPMs.";
+          return;
+        }
+
+        const songs = input.split("\n");
+        const songList = songs.map((song) => {
+          const match = song.match(/^(.+?)\s+(\d{2,3})$/);
+          return match
+            ? { name: match[1].trim(), bpm: parseInt(match[2]) }
+            : null;
+        });
+
+        const sortedSongs = songList
+          .filter((song) => song !== null)
+          .sort((a, b) => a.bpm - b.bpm)
+          .map((song) => `${song.name} ${song.bpm}`)
+          .join("\n");
+
+        document.getElementById("sortedSongs").value = sortedSongs;
+      }
+    </script>
+  </body>
+</html>
